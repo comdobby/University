@@ -15,9 +15,16 @@ winTR _ 0 acc = acc
 winTR a b acc
   | a < b = winTR b a acc
   | a `mod` 10 == 0 = winTR (a - 1) (b - 1) $! (b + acc)
-  | otherwise = winTR (a - 1) b (b + acc)
+  | otherwise = winTR (a - 1) b $! (b + acc)
 
 win2 :: Int -> Int -> Int
 win2 a b = winTR a b 0
 
 -- c) implementieren fib-Funktion und optimieren die Funktion
+-- Use tail recursion + strict evaluation
+fibTR :: Int -> Int -> Int -> Int
+fibTR 0 prev curr = prev
+fibTR n prev curr = fibTR (n - 1) curr $! (prev + curr)
+
+fib :: Int -> Int
+fib x = fibTR x 0 1
