@@ -34,3 +34,11 @@ eval :: CommandS -> Int -> Int -> Int
 eval Put = putChips
 eval Take = takeChips
 eval Win = win
+
+-- b) erweitern CommandS -> CommandP(Summen- und Produkttyp)
+data CommandP = PutP Int Int | TakeP Int Int | WinP Int Int deriving Show
+
+evalP :: CommandP -> Int
+evalP (PutP owned added) = putChips owned added
+evalP (TakeP owned taken) = takeChips owned taken
+evalP (WinP a b) = win a b
