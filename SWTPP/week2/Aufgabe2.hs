@@ -1,8 +1,3 @@
--- Verwendet deriving Show
--- deriving Show konveriert Datentyp in String
-
--- a) implementieren Aufzählungstyp CommandS, CommandS hat Put, Take und Win
-
 -- Hilfsfunktionen
 fee :: Int
 fee = 1
@@ -26,14 +21,26 @@ winTR a b acc
 win :: Int -> Int -> Int
 win a b = winTR a b 0
 
--- CommandS
+-- a) implementieren Aufzählungstyp CommandS, CommandS hat Put, Take und Win
+-- Verwendet deriving Show -> deriving Show konveriert Datentyp in String
 data CommandS = Put | Take | Win deriving Show
 
--- eval
-eval :: CommandS -> Int -> Int -> Int
-eval Put = putChips
-eval Take = takeChips
-eval Win = win
+evalS :: CommandS -> Int -> Int -> Int
+evalS Put = putChips
+evalS Take = takeChips
+evalS Win = win
+
+-- test deriving Show
+myCommand :: CommandS
+myCommand = Put
+
+-- Musterlösung - use patternmatching
+-- evalS :: CommandS -> Int -> Int -> Int
+-- evalS c a b = case c of
+--     Put -> putChips a b
+--     Take -> takeChips a b
+--     Win -> win a b
+
 
 -- b) erweitern CommandS -> CommandP(Summen- und Produkttyp)
 data CommandP = PutP Int Int | TakeP Int Int | WinP Int Int deriving Show
@@ -43,4 +50,15 @@ evalP (PutP owned added) = putChips owned added
 evalP (TakeP owned taken) = takeChips owned taken
 evalP (WinP a b) = win a b
 
--- c) 
+
+-- c) implementieren rekursive Datentyp CommandR
+data CommandR = PutR CommandR CommandR 
+              | TakeR CommandR CommandR 
+              | WinR CommandR CommandR 
+              | ValR Int deriving Show
+
+evalR :: CommandR -> Int
+evalR (ValR v) = v
+evalR (PutR owned added) = putChips (evalR owned) (evalR added)
+evalR (TakeR owned taken) = takeChips (evalR owned) (evalR taken)
+evalR (WinR a b) = win (evalR a) (evalR b)
