@@ -42,3 +42,5 @@ evalP :: CommandP -> Int
 evalP (PutP owned added) = putChips owned added
 evalP (TakeP owned taken) = takeChips owned taken
 evalP (WinP a b) = win a b
+
+-- c) 
